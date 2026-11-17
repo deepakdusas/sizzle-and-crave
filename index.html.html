@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sizzle & Craves – Jaipur</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#fff8f1;--card:#fff;--tx:#2a1a12;--mut:#7a6558;--pri:#d9480f;--pri2:#f59f00;--bd:#f0e0d2;--ok:#2f9e44;--bad:#e03131;color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1410;--card:#262019;--tx:#f7ece3;--mut:#b49f90;--bd:#3a3028;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1b1410;--card:#262019;--tx:#f7ece3;--mut:#b49f90;--bd:#3a3028;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;padding:10px 14px;flex-wrap:wrap}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:10}
+.logo{font-weight:800;font-size:20px;color:var(--pri);margin-right:auto}.logo span{color:var(--pri2)}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+button,.btn{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:10px;text-decoration:none;display:inline-block}
+button.on,.pri{background:var(--pri);color:#fff;border-color:var(--pri)}.wa{background:#25d366;color:#fff;border-color:#25d366}
+.sm{padding:4px 9px;font-size:13px}.bad{color:var(--bad)}
+main{max-width:1000px;margin:0 auto;padding:14px}
+.hero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-radius:18px;padding:28px 20px;margin-bottom:16px}
+.hero h1{margin:0 0 6px;font-size:28px}.hero p{margin:0 0 12px;opacity:.95}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px}
+.item .e{font-size:42px}.item h3{margin:4px 0 2px;font-size:16px}.price{font-weight:700;color:var(--pri)}
+.tag{font-size:11px;padding:2px 7px;border-radius:99px;border:1px solid var(--bd);color:var(--mut)}
+.cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:8px}
+.two{display:grid;grid-template-columns:1fr 320px;gap:14px}@media(max-width:760px){.two{grid-template-columns:1fr}}
+input,select,textarea{font:inherit;width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);margin:4px 0 8px}
+label{font-size:13px;color:var(--mut)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:5px 0}
+.q button{padding:2px 9px}
+.steps{display:flex;gap:4px;margin:14px 0}.steps div{flex:1;text-align:center;font-size:12px;padding:8px 2px;border-radius:8px;background:var(--bd);color:var(--mut)}
+.steps .d{background:var(--ok);color:#fff}
+.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}.stat b{font-size:24px;display:block}
+.tbl{overflow-x:auto}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid var(--bd);font-size:14px;white-space:nowrap}
+.low{color:var(--bad);font-weight:700}
+.view{display:none}.view.act{display:block}
+.map{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin-top:16px}
+footer{text-align:center;color:var(--mut);font-size:13px;padding:24px 10px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:10px;display:none;z-index:20}
+</style></head><body>
+<header><div class="logo">🔥 Sizzle <span>&</span> Craves</div>
+<nav id="nav"></nav></header>
+<main>
+<!-- CUSTOMER -->
+<section id="v-menu" class="view act">
+ <div class="hero"><h1>Sizzle & Craves, Jaipur</h1><p>Fresh, hot aur seedha aapke ghar tak. Order karo WhatsApp par!</p>
+ <a class="btn" href="#map" onclick="go('map');return false">📍 Location dekho</a></div>
+ <div class="two"><div><div class="cats" id="cats"></div><div class="grid" id="menu"></div></div>
+ <div><div class="card" id="cart" style="position:sticky;top:70px"></div></div></div>
+</section>
+<section id="v-track" class="view"><div class="card"><h2>Order Tracking</h2>
+ <label>Order ID (e.g. SC1001)</label><input id="tid" placeholder="SC1001">
+ <button class="pri" onclick="track()">Track karo</button><div id="tres"></div>
+ <p class="tag" style="display:inline-block;margin-top:12px">Demo: orders isi browser/device me save hote hain.</p></div></section>
+<section id="v-map" class="view"><div class="card"><h2>Hamari Location</h2><div id="maptxt"></div></div></section>
+<!-- ADMIN -->
+<section id="v-admin" class="view"><div id="admin"></div></section>
+</main>
+<footer id="foot"></footer><div id="toast"></div>
+<script>
+const KEY='sizzle_craves_v1';
+const seed=()=>({counter:1000,orders:[],
+settings:{name:'Sizzle & Craves',phone:'+91 99999 99999',wa:'919999999999',addr:'C-Scheme, Jaipur, Rajasthan 302001',hours:'11:00 AM – 11:30 PM',pass:'sizzle123',delivery:40,gst:5},
+menu:[
+{id:1,n:'Paneer Tikka Burger',c:'Burgers',p:149,e:'🍔',s:40,low:8,on:1,v:1},
+{id:2,n:'Crispy Chicken Burger',c:'Burgers',p:179,e:'🍔',s:30,low:8,on:1,v:0},
+{id:3,n:'Margherita Pizza',c:'Pizza',p:249,e:'🍕',s:25,low:6,on:1,v:1},
+{id:4,n:'Peri Peri Chicken Pizza',c:'Pizza',p:329,e:'🍕',s:20,low:6,on:1,v:0},
+{id:5,n:'Dal Baati Churma',c:'Rajasthani',p:269,e:'🍛',s:18,low:5,on:1,v:1},
+{id:6,n:'Laal Maas',c:'Rajasthani',p:399,e:'🍖',s:12,low:4,on:1,v:0},
+{id:7,n:'Pyaaz Kachori (2 pc)',c:'Snacks',p:70,e:'🥟',s:60,low:10,on:1,v:1},
+{id:8,n:'Peri Peri Fries',c:'Snacks',p:119,e:'🍟',s:50,low:10,on:1,v:1},
+{id:9,n:'Masala Chai',c:'Drinks',p:30,e:'☕',s:100,low:15,on:1,v:1},
+{id:10,n:'Mango Lassi',c:'Drinks',p:79,e:'🥭',s:35,low:8,on:1,v:1},
+{id:11,n:'Chocolate Brownie Sizzler',c:'Desserts',p:199,e:'🍫',s:4,low:5,on:1,v:1}]});
+let S;try{S=JSON.parse(localStorage.getItem(KEY))||seed()}catch(e){S=seed()}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let cart={},cat='All',view='menu',isAdmin=false,atab='dash';
+const STAT=['New','Preparing','Out for Delivery','Delivered'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const inr=n=>'₹'+Number(n).toLocaleString('en-IN');
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2500)}
+function go(v){view=v;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('act',x.id==='v-'+v));
+ const items=[['menu','🍽 Menu'],['track','📦 Track'],['map','📍 Location'],['admin','🔐 Owner']];
+ $('nav').innerHTML=items.map(i=>`<button class="${i[0]===v?'on':''}" onclick="go('${i[0]}')">${i[1]}</button>`).join('');
+ if(v==='admin')renderAdmin();if(v==='map')renderMap();if(v==='menu'){renderMenu();renderCart()}
+ try{history.replaceState(null,'','#'+v)}catch(e){}window.scrollTo(0,0)}
+/* MENU */
+function renderMenu(){const cs=['All',...new Set(S.menu.map(m=>m.c))];
+ $('cats').innerHTML=cs.map(c=>`<button class="sm ${c===cat?'on':''}" onclick="cat='${c}';renderMenu()">${c}</button>`).join('');
+ $('menu').innerHTML=S.menu.filter(m=>cat==='All'||m.c===cat).map(m=>{const out=!m.on||m.s<=0;
+ return `<div class="card item"><div class="e">${m.e}</div><h3>${esc(m.n)}</h3>
+ <span class="tag">${m.v?'🟢 Veg':'🔴 Non-veg'}</span> <span class="tag">${esc(m.c)}</span>
+ <div class="row"><span class="price">${inr(m.p)}</span>${out?'<span class="tag bad">Sold out</span>':`<button class="pri sm" onclick="add(${m.id})">+ Add</button>`}</div></div>`}).join('')}
+function add(id){const m=S.menu.find(x=>x.id===id);if((cart[id]||0)>=m.s)return toast('Itna stock nahi hai');cart[id]=(cart[id]||0)+1;renderCart()}
+function chg(id,d){const m=S.menu.find(x=>x.id===id);const q=(cart[id]||0)+d;if(q<=0)delete cart[id];else if(q<=m.s)cart[id]=q;renderCart()}
+function totals(){let sub=0;for(const id in cart){sub+=S.menu.find(x=>x.id==id).p*cart[id]}
+ const del=$('otype')&&$('otype').value==='Pickup'?0:(sub?+S.settings.delivery:0);const gst=Math.round(sub*S.settings.gst/100);return{sub,del,gst,tot:sub+del+gst}}
+function renderCart(){const ids=Object.keys(cart);
+ if(!ids.length){$('cart').innerHTML='<h3>🛒 Aapka Cart</h3><p class="tag">Cart khaali hai</p>';return}
+ const keep=['cn','cp','ca','otype'].map(i=>$(i)?$(i).value:'');const t=totals();
+ $('cart').innerHTML=`<h3>🛒 Aapka Cart</h3>`+ids.map(id=>{const m=S.menu.find(x=>x.id==id);
+ return `<div class="row"><span>${m.e} ${esc(m.n)}</span><span class="q"><button onclick="chg(${id},-1)">−</button> ${cart[id]} <button onclick="chg(${id},1)">+</button></span></div>`}).join('')+
+ `<hr><div class="row"><span>Subtotal</span><span>${inr(t.sub)}</span></div><div class="row"><span>Delivery</span><span id="dl">${inr(t.del)}</span></div><div class="row"><span>GST ${S.settings.gst}%</span><span>${inr(t.gst)}</span></div><div class="row"><b>Total</b><b id="tt">${inr(t.tot)}</b></div>
+ <label>Naam</label><input id="cn" value="${esc(keep[0])}"><label>Phone</label><input id="cp" inputmode="tel" value="${esc(keep[1])}">
+ <label>Type</label><select id="otype" onchange="renderCart()"><option>Delivery</option><option ${keep[3]==='Pickup'?'selected':''}>Pickup</option></select>
+ <label>Address (delivery ke liye)</label><textarea id="ca" rows="2">${esc(keep[2])}</textarea>
+ <button class="wa" style="width:100%" onclick="place()">📲 WhatsApp par Order karo</button>`}
+function place(){const n=$('cn').value.trim(),p=$('cp').value.trim(),a=$('ca').value.trim(),ty=$('otype').value;
+ if(!n||p.length<10)return toast('Naam aur sahi phone number daalo');if(ty==='Delivery'&&!a)return toast('Address daalo');
+ const t=totals();const items=Object.keys(cart).map(id=>{const m=S.menu.find(x=>x.id==id);m.s-=cart[id];return{id:m.id,n:m.n,q:cart[id],p:m.p}});
+ const id='SC'+(++S.counter);const o={id,items,total:t.tot,name:n,phone:p,addr:a,type:ty,status:'New',time:Date.now(),log:[{s:'New',t:Date.now()}]};
+ S.orders.unshift(o);save();
+ const msg=`*Naya Order – ${S.settings.name}*%0AOrder ID: ${id}%0A`+items.map(i=>`• ${encodeURIComponent(i.n)} x${i.q}`).join('%0A')+`%0A%0ATotal: ${encodeURIComponent(inr(t.tot))}%0AType: ${ty}%0ANaam: ${encodeURIComponent(n)}%0APhone: ${encodeURIComponent(p)}`+(ty==='Delivery'?`%0AAddress: ${encodeURIComponent(a)}`:'');
+ cart={};renderCart();renderMenu();$('tid').value=id;
+ window.open(`https://wa.me/${S.settings.wa}?text=${msg}`,'_blank');toast('Order place ho gaya: '+id);go('track');track()}
+/* TRACK */
+function track(){const id=$('tid').value.trim().toUpperCase();const o=S.orders.find(x=>x.id===id);
+ if(!o){$('tres').innerHTML='<p class="bad">Order nahi mila. ID check karo.</p>';return}
+ const i=STAT.indexOf(o.status);
+ $('tres').innerHTML=`<h3>${o.id} – ${inr(o.total)}</h3>`+(o.status==='Cancelled'?'<p class="bad"><b>Order cancel ho gaya.</b></p>':
+ `<div class="steps">${STAT.map((s,k)=>`<div class="${k<=i?'d':''}">${k<=i?'✓ ':''}${s==='Out for Delivery'&&o.type==='Pickup'?'Ready':s}</div>`).join('')}</div>`)+
+ `<p>${o.items.map(x=>esc(x.n)+' x'+x.q).join(', ')}</p><p class="tag" style="display:inline-block">Placed: ${new Date(o.time).toLocaleString('en-IN')}</p>`}
+/* MAP */
+function renderMap(){const q=encodeURIComponent(S.settings.name+' '+S.settings.addr);
+ $('maptxt').innerHTML=`<p>📍 ${esc(S.settings.addr)}</p><p>🕒 ${esc(S.settings.hours)}</p><p>📞 ${esc(S.settings.phone)}</p>
+ <a class="btn pri" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">Google Maps me kholo</a>
+ <a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${q}">🧭 Directions</a>
+ <a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/${S.settings.wa}">WhatsApp</a>`}
+/* ADMIN */
+function renderAdmin(){const A=$('admin');
+ if(!isAdmin){A.innerHTML=`<div class="card" style="max-width:360px;margin:30px auto"><h2>Owner Login</h2><label>Password</label><input id="pw" type="password" onkeydown="if(event.key==='Enter')login()"><button class="pri" onclick="login()">Login</button><p class="tag">Default password: sizzle123 (Settings me badal lo)</p></div>`;return}
+ const tabs=[['dash','📊 Dashboard'],['ord','🧾 Orders'],['inv','📦 Inventory'],['set','⚙️ Settings']];
+ let h=`<div class="cats">${tabs.map(t=>`<button class="${t[0]===atab?'on':''}" onclick="atab='${t[0]}';renderAdmin()">${t[1]}</button>`).join('')}<button class="bad" onclick="isAdmin=false;renderAdmin()">Logout</button></div>`;
+ if(atab==='dash'){const day=new Date().toDateString(),td=S.orders.filter(o=>new Date(o.time).toDateString()===day&&o.status!=='Cancelled');
+  const rev=td.reduce((a,o)=>a+o.total,0),all=S.orders.filter(o=>o.status!=='Cancelled').reduce((a,o)=>a+o.total,0),low=S.menu.filter(m=>m.s<=m.low);
+  const cnt={};S.orders.forEach(o=>o.status!=='Cancelled'&&o.items.forEach(i=>cnt[i.n]=(cnt[i.n]||0)+i.q));const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  h+=`<div class="stat"><div class="card"><b>${inr(rev)}</b>Aaj ki sale</div><div class="card"><b>${td.length}</b>Aaj ke orders</div><div class="card"><b>${S.orders.filter(o=>o.status==='New').length}</b>Naye orders</div><div class="card"><b>${inr(all)}</b>Total sale</div><div class="card"><b class="${low.length?'low':''}">${low.length}</b>Low stock items</div></div>
+  <div class="two"><div class="card"><h3>🔥 Top selling</h3>${top.map(t=>`<div class="row"><span>${esc(t[0])}</span><b>${t[1]}</b></div>`).join('')||'<p class="tag">Abhi koi order nahi</p>'}</div>
+  <div class="card"><h3>⚠️ Low stock</h3>${low.map(m=>`<div class="row"><span>${esc(m.n)}</span><span class="low">${m.s} left</span></div>`).join('')||'<p class="tag">Sab theek hai ✅</p>'}</div></div>`}
+ if(atab==='ord'){h+=`<div class="card tbl"><table><tr><th>ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Type</th><th>Status</th><th></th></tr>`+
+  (S.orders.map(o=>`<tr><td><b>${o.id}</b><br><small>${new Date(o.time).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</small></td><td>${esc(o.name)}<br><a href="tel:${esc(o.phone)}">${esc(o.phone)}</a>${o.addr?'<br><small>'+esc(o.addr)+'</small>':''}</td><td style="white-space:normal">${o.items.map(i=>esc(i.n)+' x'+i.q).join('<br>')}</td><td>${inr(o.total)}</td><td>${o.type}</td>
+  <td><select onchange="setSt('${o.id}',this.value)">${[...STAT,'Cancelled'].map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></td>
+  <td><a class="btn wa sm" target="_blank" rel="noopener" href="https://wa.me/91${o.phone.replace(/\D/g,'').slice(-10)}?text=${encodeURIComponent('Hi '+o.name+', aapka order '+o.id+' ab: '+o.status+' – '+S.settings.name)}">WA</a></td></tr>`).join('')||'<tr><td colspan="7">Koi order nahi</td></tr>')+`</table></div>`}
+ if(atab==='inv'){h+=`<div class="card tbl"><table><tr><th>Item</th><th>Price ₹</th><th>Stock</th><th>Low alert</th><th>Available</th><th></th></tr>`+
+  S.menu.map(m=>`<tr><td>${m.e} ${esc(m.n)}</td><td><input style="width:80px" type="number" value="${m.p}" onchange="upd(${m.id},'p',this.value)"></td><td><input style="width:80px" type="number" class="${m.s<=m.low?'low':''}" value="${m.s}" onchange="upd(${m.id},'s',this.value)"></td><td><input style="width:70px" type="number" value="${m.low}" onchange="upd(${m.id},'low',this.value)"></td><td><input type="checkbox" style="width:auto" ${m.on?'checked':''} onchange="upd(${m.id},'on',this.checked?1:0)"></td><td><button class="sm bad" onclick="del(${m.id})">Delete</button></td></tr>`).join('')+`</table></div>
+  <div class="card" style="margin-top:12px"><h3>➕ Naya item</h3><div class="grid"><div><label>Naam</label><input id="an"></div><div><label>Category</label><input id="ac" placeholder="Burgers"></div><div><label>Price ₹</label><input id="ap" type="number"></div><div><label>Stock</label><input id="as" type="number"></div><div><label>Emoji</label><input id="ae" value="🍽"></div></div><button class="pri" onclick="addItem()">Add item</button></div>`}
+ if(atab==='set'){const s=S.settings;h+=`<div class="card"><h3>Business Details</h3><div class="grid">`+[['name','Restaurant name'],['phone','Phone'],['wa','WhatsApp (91xxxxxxxxxx)'],['addr','Address'],['hours','Timings'],['delivery','Delivery charge ₹'],['gst','GST %'],['pass','Owner password']].map(f=>`<div><label>${f[1]}</label><input id="s_${f[0]}" value="${esc(s[f[0]])}"></div>`).join('')+`</div><button class="pri" onclick="saveSet()">Save</button> <button class="bad" onclick="if(confirm('Saara data reset?')){S=seed();save();renderAdmin()}">Reset data</button></div>`}
+ A.innerHTML=h}
+function login(){if($('pw').value===S.settings.pass){isAdmin=true;renderAdmin()}else toast('Galat password')}
+function setSt(id,s){const o=S.orders.find(x=>x.id===id);if(s==='Cancelled'&&o.status!=='Cancelled')o.items.forEach(i=>{const m=S.menu.find(x=>x.id===i.id);if(m)m.s+=i.q});o.status=s;o.log.push({s,t:Date.now()});save();toast('Status update: '+s);renderAdmin()}
+function upd(id,k,v){S.menu.find(x=>x.id===id)[k]=+v;save();renderAdmin()}
+function del(id){if(confirm('Item delete karein?')){S.menu=S.menu.filter(m=>m.id!==id);save();renderAdmin()}}
+function addItem(){const n=$('an').value.trim();if(!n)return toast('Naam daalo');S.menu.push({id:Date.now(),n,c:$('ac').value.trim()||'Others',p:+$('ap').value||0,e:$('ae').value||'🍽',s:+$('as').value||0,low:5,on:1,v:1});save();renderAdmin()}
+function saveSet(){['name','phone','wa','addr','hours','delivery','gst','pass'].forEach(k=>S.settings[k]=$('s_'+k).value);save();foot();toast('Saved ✅')}
+function foot(){$('foot').textContent='© '+S.settings.name+' · '+S.settings.addr+' · '+S.settings.phone}
+foot();const h=location.hash.slice(1);go(['menu','track','map','admin'].includes(h)?h:'menu');
+</script></body></html>
